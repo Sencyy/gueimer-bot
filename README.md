@@ -2,4 +2,4 @@
 
 ### Dependencies
 - discord.py
-- dotenv
+- python-dotenv
