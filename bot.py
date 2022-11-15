@@ -36,6 +36,14 @@ class MyClient(discord.Client):
 
         if message.content.startswith('!roll'):
             await message.reply(f'sua rola é {random.randrange(1, 100)}!')
+        
+        if message.content.startswith('!pergunta'):
+            tmpnum = random.randrange(0, 2)
+            if tmpnum == 0:
+                resposta = "não"
+            if tmpnum == 1:
+                resposta = "sim"
+            await message.reply(f'Eu acho que {resposta}')
     
 
 client = MyClient(intents=intents)
