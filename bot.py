@@ -5,7 +5,17 @@ import datetime
 from dotenv import load_dotenv
 from discord.ext import commands
 
+load_dotenv()
+  
+token = os.getenv('TOKEN')
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+
 time = datetime.datetime.now()
+bot = commands.Bot(command_prefix='>', intents=intents)
+random.seed(None, 2)
 
 
 class MyClient(discord.Client):
@@ -24,17 +34,16 @@ class MyClient(discord.Client):
             await message.reply(f'a data e hora são: {time}!')
             print(f"{time}: Data e hora solicitados!")
 
-load_dotenv()
-  
-token = os.getenv('TOKEN')
-
-intents = discord.Intents.default()
-intents.message_content = True
-
+        if message.content.startswith('!roll'):
+            await message.reply(f'sua rola é {random.randrange(1, 100)}!')
+    
 
 client = MyClient(intents=intents)
 
-bot = commands.Bot(command_prefix='>', intents=intents)
+
+
+
+
 
 
 
