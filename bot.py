@@ -3,56 +3,44 @@ import os
 import random
 import datetime
 from dotenv import load_dotenv
-from discord.ext import commands
+
+import cmd_pergunta
+import cmd_roll
+
 
 load_dotenv()
-  
-token = os.getenv('TOKEN')
 
-intents = discord.Intents.default()
-intents.message_content = True
+token = os.getenv("TOKEN")
+bot = discord.Bot()
 
+print("GueimerBot 2.0 alpha")
+print("Conectando-se aos servidores do Discord...")
 
-time = datetime.datetime.now()
-bot = commands.Bot(command_prefix='>', intents=intents)
-random.seed(None, 2)
+@bot.event
+async def on_ready():
+    print(f"Conectado como {bot.user}!")
 
+@bot.command(description="Envia a latência do bot.")
+async def ping(ctx):
+    await ctx.respond(f"Pong! A latência do bot é {bot.latency}")
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print(f"Conectado como {self.user} (ID: {self.user.id})")
-    
-    async def on_message(self, message):
-        if message.author.id == self.user.id:
-            return
+@bot.command(description="Gueime")
+async def gueime(ctx):
+    await ctx.respond("vose ser um gueime")
 
-        if message.content.startswith('!gueime'):
-            await message.reply("vose ser muito gueime", mention_author=True)
-            print(f"{time}: Gueime solicitado!")
+@bot.command(description="Mostra a data e hora no momento em que o comando foi acionado")
+async def time(ctx):
+    await ctx.respond(f"A data e hora é: {datetime.datetime.now()}")
 
-        if message.content.startswith('!datetime'):
-            await message.reply(f'a data e hora são: {time}!')
-            print(f"{time}: Data e hora solicitados!")
+@bot.command(description="Faz uma pergunta ao bot.")
+async def pergunta(ctx, pergunta: discord.Option(str)):
+    await ctx.respond(f"{ctx.author.name} perguntou: {pergunta}")
+    await ctx.respond(f"Eu acho que {cmd_pergunta.pergunta()}")
 
-        if message.content.startswith('!roll'):
-            await message.reply(f'sua rola é {random.randrange(1, 100)}!')
-        
-        if message.content.startswith('!pergunta'):
-            tmpnum = random.randrange(0, 2)
-            if tmpnum == 0:
-                resposta = "não"
-            if tmpnum == 1:
-                resposta = "sim"
-            await message.reply(f'Eu acho que {resposta}')
-    
-
-client = MyClient(intents=intents)
+@bot.command(description="Rola o dado em um número de 0 à 100.")
+async def roll(ctx):
+    await ctx.respond(f"{ctx.author.name} rolou {cmd_roll.roll()}")
 
 
 
-
-
-
-
-
-client.run(token)
+bot.run(token)
