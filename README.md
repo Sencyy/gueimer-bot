@@ -1,5 +1,5 @@
 # Gueime bot discord
 
 ### Dependencies
-- discord.py
+- py-cord
 - python-dotenv
